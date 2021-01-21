@@ -27,9 +27,9 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             // Gameloop
             while (!TestGameOver())
             {
-                SetInput();
+                Console.WriteLine("______________________________\n");
                 DrawGameBoard();
-                Console.WriteLine("\nThe current places are " + availableFields.ToString() + " \n");
+                SetInput();
                 ChangePlayer();
             }
 
@@ -123,43 +123,25 @@ namespace Tic_Tac_Toe_Local_Multiplayer
 
         private static void SetInput()
         {
-            if (player)
+            int playerField = GetPlayerInput();
+            while (!IsAvailable(playerField) || playerField < 0 || playerField > 8)
             {
-                int playerField = GetPlayerInput();
-                while (!IsAvailable(playerField))
-                {
-                    playerField = GetPlayerInput();
-                }
+                Console.WriteLine("You chose a field, that is not available.");
+                playerField = GetPlayerInput();
+            }
 
-                WriteInput(playerField);
-            }
-            else
-            {
-                GetComputerInput();
-            }
+            WriteInput(playerField);
         }
 
         private static int GetPlayerInput()
         {
-            Console.Write("Choose your field: ");
+            Console.Write(GetPlayerName() + ", choose your field: ");
             int playerInput = Int32.Parse(Console.ReadLine());
             return playerInput;
         }
-
-        private static void GetComputerInput()
-        {
-            Random computerFieldRandomizer = new Random();
-            int computerField = computerFieldRandomizer.Next(0, 9);
-            while (!IsAvailable(computerField))
-            {
-                computerField = computerFieldRandomizer.Next(0, 9);
-            }
-            WriteInput(computerField);
-        }
-
+        
         private static void WriteInput(int field)
         {
-            Console.WriteLine("\nThe currently selected field is " + field + " \n");
             availableFields[field] = false;
 
             if (field == 0 || field == 1 || field == 2)
@@ -207,9 +189,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
 
         private static void DrawGameBoard()
         {
-            Console.WriteLine("");
-            Console.WriteLine("Player: " + GetPlayerName());
-            Console.WriteLine("\n Gameboard:");
+            Console.WriteLine("\nGameboard:");
             Console.WriteLine("-|---|---|---|-");
             Console.WriteLine("-| " + fields[0, 0] + " | " + fields[0, 1] + " | " + fields[0, 2] + " |-");
             Console.WriteLine("-|---|---|---|-");
@@ -217,12 +197,12 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             Console.WriteLine("-|---|---|---|-");
             Console.WriteLine("-| " + fields[2, 0] + " | " + fields[2, 1] + " | " + fields[2, 2] + " |-");
             Console.WriteLine("-|---|---|---|-");
-            Console.WriteLine("\n");
+            Console.WriteLine("");
         }
 
         private static string GetPlayerName()
         {
-            return player ? "Player" : "Computer";
+            return player ? "Player 1" : "Player 2";
         }
 
         private static void ChangePlayer()
