@@ -33,6 +33,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
                 ChangePlayer();
             }
 
+            DrawGameBoard();
             Console.WriteLine("The game is over!");
             Console.ReadLine();
         }
