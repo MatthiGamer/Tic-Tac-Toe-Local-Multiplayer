@@ -34,7 +34,8 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             }
 
             DrawGameBoard();
-            Console.WriteLine("The game is over!");
+            ChangePlayer();
+            Console.WriteLine("The game is over! " + GetPlayerName() + " won!");
             Console.ReadLine();
         }
 
