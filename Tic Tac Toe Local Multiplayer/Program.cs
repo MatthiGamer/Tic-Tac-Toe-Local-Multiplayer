@@ -145,38 +145,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
         private static void WriteInput(int field)
         {
             availableFields[field] = false;
-
-            if (field == 0 || field == 1 || field == 2)
-            {
-                fields[0, field] = WriteInField();
-            }
-            else
-            {
-                switch (field)
-                {
-                    case 3:
-                        fields[1, 0] = WriteInField();
-                        break;
-                    case 4:
-                        fields[1, 1] = WriteInField();
-                        break;
-                    case 5:
-                        fields[1, 2] = WriteInField();
-                        break;
-                    case 6:
-                        fields[2, 0] = WriteInField();
-                        break;
-                    case 7:
-                        fields[2, 1] = WriteInField();
-                        break;
-                    case 8:
-                        fields[2, 2] = WriteInField();
-                        break;
-                    default:
-                        Console.WriteLine("Error. Impossible number entered.");
-                        break;
-                }
-            }
+            fields[field / 3, field % 3] = WriteInField();
         }
 
         private static string WriteInField()
