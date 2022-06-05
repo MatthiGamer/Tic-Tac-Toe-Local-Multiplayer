@@ -7,7 +7,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
     class Program
     {
         // Variables
-        private static string[,] fields = new string[3, 3];
+        private static char[,] fields = new char[3, 3];
         private static bool[] availableFields = new bool[9];
         private static bool player = true;
         private static int usedFields = 0;
@@ -36,7 +36,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
         {
             for (int i = 0; i < 9; i++)
             {
-                fields[i / 3, i % 3] = " ";
+                fields[i / 3, i % 3] = '\0';
                 availableFields[i] = true;
             }
             usedFields = 0;
@@ -55,7 +55,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             Console.WriteLine("\nNow let's start the game, shall we?");
         }
 
-        private static string WriteInField() => player ? "X" : "O";
+        private static char WriteInField() => player ? 'X' : 'O';
         private static string GetPlayerName() => player ? "Player 1" : "Player 2";
         private static bool AllFieldsUsed() => usedFields == 8;
         private static bool IsGameOver() => AllFieldsUsed() || HasWon();
@@ -64,13 +64,13 @@ namespace Tic_Tac_Toe_Local_Multiplayer
 
         private static bool HasWon()
         {
-            if ((fields[0, 0] == fields[1, 1] && fields[1, 1] == fields[2, 2] && fields[1, 1] != " ") /* First Cross */ ||
-                    (fields[2, 0] == fields[1, 1] && fields[1, 1] == fields[0, 2] && fields[1, 1] != " ") /* Second Cross */ ) return true;
+            if ((fields[0, 0] == fields[1, 1] && fields[1, 1] == fields[2, 2] && fields[1, 1] != '\0') /* First Cross */ ||
+                    (fields[2, 0] == fields[1, 1] && fields[1, 1] == fields[0, 2] && fields[1, 1] != '\0') /* Second Cross */ ) return true;
 
             for (int i = 0; i < 3; i++)
             {
-                if ((fields[i, 0] == fields[i, 1] && fields[i, 1] == fields[i, 2] && fields[i, 0] != " ") /* Horizontal */ || 
-                    (fields[0, i] == fields[1, i] && fields[1, i] == fields[2, i] && fields[0, i] != " ") /* Vertical */ ) return true;
+                if ((fields[i, 0] == fields[i, 1] && fields[i, 1] == fields[i, 2] && fields[i, 0] != '\0') /* Horizontal */ || 
+                    (fields[0, i] == fields[1, i] && fields[1, i] == fields[2, i] && fields[0, i] != '\0') /* Vertical */ ) return true;
             }
 
             return false;
@@ -89,7 +89,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
         }
 
         private static int GetPlayerInput()
-        {
+        {     
             Console.Write(GetPlayerName() + ", choose your field: ");
             int playerInput = Int32.Parse(Console.ReadLine());
             return playerInput;
