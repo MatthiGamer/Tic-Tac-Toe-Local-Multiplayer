@@ -2,14 +2,6 @@
 
 // ASCII 48 = DEC 0
 
-//Console.WriteLine("-|---|---|---|-");
-//Console.WriteLine("-| 0 | 1 | 2 |-");
-//Console.WriteLine("-|---|---|---|-");
-//Console.WriteLine("-| 3 | 4 | 5 |-");
-//Console.WriteLine("-|---|---|---|-");
-//Console.WriteLine("-| 6 | 7 | 8 |-");
-//Console.WriteLine("-|---|---|---|-");
-
 namespace Tic_Tac_Toe_Local_Multiplayer
 {
     class Program
@@ -18,14 +10,15 @@ namespace Tic_Tac_Toe_Local_Multiplayer
         private static string[,] fields = new string[3, 3];
         private static bool[] availableFields = new bool[9];
         private static bool player = true;
+        private static int usedFields = 0;
 
-        static void Main(string[] args)
+        static void Main()
         {
             ResetFields();
             DrawStartBoard();
 
             // Gameloop
-            while (!TestGameOver())
+            while (!IsGameOver())
             {
                 Console.WriteLine("______________________________\n");
                 DrawGameBoard();
@@ -41,14 +34,12 @@ namespace Tic_Tac_Toe_Local_Multiplayer
 
         private static void ResetFields()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    fields[i, j] = " ";
-                    availableFields[(j + 1) + (i * 3) - 1] = true;
-                }
+                fields[i / 3, i % 3] = " ";
+                availableFields[i] = true;
             }
+            usedFields = 0;
         }
 
         private static void DrawStartBoard()
@@ -64,60 +55,22 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             Console.WriteLine("\nNow let's start the game, shall we?");
         }
 
-        private static bool TestGameOver()
+        private static string WriteInField() => player ? "X" : "O";
+        private static string GetPlayerName() => player ? "Player 1" : "Player 2";
+        private static bool AllFieldsUsed() => usedFields == 8;
+        private static bool IsGameOver() => AllFieldsUsed() || HasWon();
+        private static bool IsAvailable(int field) => availableFields[field];
+        private static void ChangePlayer() => player = !player;
+
+        private static bool HasWon()
         {
-            if (AllFieldsUsed() || HorizontalWin() || VerticalWin() || CrossWin())
-            {
-                return true;
-            }
+            if ((fields[0, 0] == fields[1, 1] && fields[1, 1] == fields[2, 2] && fields[1, 1] != " ") /* First Cross */ ||
+                    (fields[2, 0] == fields[1, 1] && fields[1, 1] == fields[0, 2] && fields[1, 1] != " ") /* Second Cross */ ) return true;
 
-            return false;
-        }
-
-        private static bool AllFieldsUsed()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                if (availableFields[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static bool HorizontalWin()
-        {
             for (int i = 0; i < 3; i++)
             {
-                if (fields[i, 0] == fields[i, 1] && fields[i, 1] == fields[i, 2] && fields[i, 0] != " ")
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool VerticalWin()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (fields[0, i] == fields[1, i] && fields[1, i] == fields[2, i] && fields[0, i] != " ")
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool CrossWin()
-        {
-            if (((fields[0, 0] == fields[1, 1] && fields[1, 1] == fields[2, 2]) || (fields[2, 0] == fields[1, 1] && fields[1, 1] == fields[0, 2])) && fields[1, 1] != " ")
-            {
-                return true;
+                if ((fields[i, 0] == fields[i, 1] && fields[i, 1] == fields[i, 2] && fields[i, 0] != " ") /* Horizontal */ || 
+                    (fields[0, i] == fields[1, i] && fields[1, i] == fields[2, i] && fields[0, i] != " ") /* Vertical */ ) return true;
             }
 
             return false;
@@ -146,16 +99,7 @@ namespace Tic_Tac_Toe_Local_Multiplayer
         {
             availableFields[field] = false;
             fields[field / 3, field % 3] = WriteInField();
-        }
-
-        private static string WriteInField()
-        {
-            return player ? "X" : "O";
-        }
-
-        private static bool IsAvailable(int field)
-        {
-            return availableFields[field];
+            usedFields++;
         }
 
         private static void DrawGameBoard()
@@ -169,16 +113,6 @@ namespace Tic_Tac_Toe_Local_Multiplayer
             Console.WriteLine("-| " + fields[2, 0] + " | " + fields[2, 1] + " | " + fields[2, 2] + " |-");
             Console.WriteLine("-|---|---|---|-");
             Console.WriteLine("");
-        }
-
-        private static string GetPlayerName()
-        {
-            return player ? "Player 1" : "Player 2";
-        }
-
-        private static void ChangePlayer()
-        {
-            player = !player;
         }
     }
 }
